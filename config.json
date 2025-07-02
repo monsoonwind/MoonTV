@@ -80,6 +80,26 @@
     "ikun": {
       "api": "https://ikunzyapi.com/api.php/provide/vod",
       "name": "iKun资源"
+    },
+    "jinchan":{
+      "api":"http://jczy.jinchan.pro/api.php/provide/vod",
+      "name":"金蝉"
+    },
+    "wuxian":{
+      "api":"https://api.wuxianzy.net/api.php/provide/vod",
+      "name":"无线"
+    },
+    "fczy":{
+      "api":"https://api.fczy888.me/api.php/provide/vod",
+      "name":"蜂巢片库"
+    },
+    "mt":{
+      "api":"https://caiji.maotaizy.cc/api.php/provide/vod",
+      "name":"茅台"
+    },
+    "baidu":{
+      "api":"https://api.apibdzy.com/api.php/provide/vod",
+      "name":"百度"
     }
   }
 }
