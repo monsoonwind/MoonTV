@@ -2,6 +2,31 @@
 
 import Hls from 'hls.js';
 
+/**
+ * 获取图片代理 URL 设置
+ */
+export function getImageProxyUrl(): string | null {
+  if (typeof window === 'undefined') return null;
+
+  const imageProxyUrl = localStorage.getItem('imageProxyUrl');
+  return imageProxyUrl && imageProxyUrl.trim() ? imageProxyUrl.trim() : null;
+}
+
+/**
+ * 处理图片 URL，如果设置了图片代理则使用代理
+ */
+export function processImageUrl(originalUrl: string): string {
+  if (!originalUrl) return originalUrl;
+
+  const proxyUrl = getImageProxyUrl();
+  if (!proxyUrl) return originalUrl;
+
+  // 如果原始 URL 已经是代理 URL，则不再处理
+  if (originalUrl.includes(proxyUrl)) return originalUrl;
+
+  return `${proxyUrl}${encodeURIComponent(originalUrl)}`;
+}
+
 export function cleanHtmlTags(text: string): string {
   if (!text) return '';
   return text
@@ -72,9 +97,9 @@ export async function getVideoResolutionFromM3u8(m3u8Url: string): Promise<{
           hasMetadataLoaded &&
           (hasSpeedCalculated || actualLoadSpeed !== '未知')
         ) {
+          clearTimeout(timeout);
           const width = video.videoWidth;
           if (width && width > 0) {
-            clearTimeout(timeout);
             hls.destroy();
             video.remove();
 
@@ -94,6 +119,13 @@ export async function getVideoResolutionFromM3u8(m3u8Url: string): Promise<{
 
             resolve({
               quality,
+              loadSpeed: actualLoadSpeed,
+              pingTime: Math.round(pingTime),
+            });
+          } else {
+            // webkit 无法获取尺寸，直接返回
+            resolve({
+              quality: '未知',
               loadSpeed: actualLoadSpeed,
               pingTime: Math.round(pingTime),
             });
